@@ -1,0 +1,82 @@
+# Exp 3 Tranposition Cipher
+
+alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+sp_char = list(map(chr, range(ord("!"), ord("/"))))
+
+
+def encrypt(plain_text, key, transpose_key):
+    encrypt_text = ""
+    for i in plain_text.lower():
+        if alphabets.__contains__(i):
+            index = alphabets.index(i)
+            index = (index + key) % 26
+            encrypt_text += alphabets[index]
+        elif i == " ":
+            encrypt_text += "$"
+        else:
+            continue
+    x = transpose(encrypt_text, transpose_key)
+    print("Subsitution Matrix : ", x)
+    y = encode(x, transpose_key)
+    z = decrypt(x, key)
+    return y, z
+
+
+def transpose(encrypt_text, transpose_key):
+    matrix = []
+    list1 = []
+    for i in range(0, len(encrypt_text)):
+        if(i % transpose_key == 0 and i > 0):
+            matrix.append(list1)
+            list1 = []
+            list1.append(encrypt_text[i])
+        else:
+            list1.append(encrypt_text[i])
+    if(len(list1) != transpose_key):
+        remaining = transpose_key - len(list1)
+        for i in range(0, remaining):
+            list1.append(sp_char[i])
+        matrix.append(list1)
+    else:
+        matrix.append(list1)
+    return matrix
+
+
+def encode(matrix, transpose_key):
+    cipher_text = ""
+    matrix2 = []
+    list2 = []
+    key = 0
+    for i in range(0, transpose_key):
+        for j in range(0, len(matrix)):
+            cipher_text += matrix[j][i]
+            list2.append(matrix[j][i])
+        matrix2.append(list2)
+        list2 = []
+    print("Transposition Matrix : ", matrix2)
+    return cipher_text
+
+
+def decrypt(matrix, key):
+    decrypt_text = ""
+    for i in matrix:
+        for j in i:
+            if alphabets.__contains__(j):
+                index = alphabets.index(j)
+                index = (index - key) % 26
+                decrypt_text += alphabets[index]
+            elif j == "$":
+                decrypt_text += " "
+            else:
+                continue
+    return decrypt_text
+
+
+plain_text = input("Enter plain text : ")
+key = int(input("Enter key : "))
+transpose_key = int(input("Enter transpose key : "))
+
+encrypting, decrypting = encrypt(plain_text, key, transpose_key)
+print("Encrypted Text Is : ", encrypting)
+print("Decrypted Text Is : ", decrypting)

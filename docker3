@@ -1,0 +1,51 @@
+# Exp 4 Vigener Cipher
+
+alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+
+def encrypt(plain_text, key):
+    encrypt_text = ""
+    main_key = ""
+    for i in range(len(plain_text)):
+        main_key += key[i % len(key)]
+    print(main_key)
+    for i in range(len(plain_text)):
+        if(alphabets.__contains__(plain_text[i])):
+            index1 = alphabets.index(plain_text[i])
+            index2 = alphabets.index(main_key[i])
+            print(index1, index2)
+            index = (index1 + index2) % 26
+            encrypt_text += alphabets[index]
+        elif(plain_text[i] == " "):
+            encrypt_text += "$"
+        else:
+            continue
+    print("Encrypted: " + encrypt_text)
+    decrypt(encrypt_text, key)
+
+
+def decrypt(cipher_text, key):
+    decrypt_text = ""
+    main_key = ""
+    for i in range(len(cipher_text)):
+        main_key += key[i % len(key)]
+    print("Main key: ", main_key)
+    for i in range(len(cipher_text)):
+        if(alphabets.__contains__(cipher_text[i])):
+            index1 = alphabets.index(cipher_text[i])
+            index2 = alphabets.index(main_key[i])
+            print(index1, index2)
+            index = (index1 - index2) % 26
+            decrypt_text += alphabets[index]
+        elif(cipher_text[i] == "$"):
+            decrypt_text += " "
+        else:
+            continue
+    print("Decrypted : " + decrypt_text)
+
+
+plain_text = input("Enter plain text : ")
+key1 = "best"
+key = input("Enter Text key : ")
+encrypt(plain_text.lower(), key1)

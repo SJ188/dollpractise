@@ -1,0 +1,52 @@
+alphabets = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+sp_char = list(map(chr,range(ord("!"),ord("/"))))
+
+def encrypt(plain_text, key):
+    encrypt_text = ""
+    for i in plain_text.lower():
+        if alphabets.__contains__(i):
+            index = alphabets.index(i)
+            index = (index + key) % 26
+            encrypt_text += alphabets[index]
+        elif i == " ":
+            encrypt_text += "$"
+        else:
+            continue
+    return encrypt_text
+
+def decrypt(encrypt_text,key):
+    decrypt_text = ""
+    for i in encrypt_text.lower():
+        if alphabets.__contains__(i):
+            index = alphabets.index(i)
+            index = (index - key) % 26
+            decrypt_text += alphabets[index]
+        elif i == "$":
+            decrypt_text += " "
+        else:
+            continue
+    return decrypt_text
+
+def frequency(plain_text):
+    frequency = dict()
+    length = len(plain_text)
+    fr = 100/length
+    for char in plain_text.lower():
+        if char in frequency:
+            frequency[char] += fr
+        elif char == " ":
+            continue
+        else:
+            frequency[char] = fr
+    return frequency
+
+
+plain_text = input("Enter plain text : ")
+key = int(input("Enter key : "))
+encrypting = encrypt(plain_text, key)
+decrypting = decrypt(encrypting, key)
+get_frequency = frequency(plain_text)
+
+print("The Encrypted Text Is : ",encrypting)
+print("The Decrypted Text Is : ",decrypting)
+print("The Frequency Of Text Is : ",get_frequency)
